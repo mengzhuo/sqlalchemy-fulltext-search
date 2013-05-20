@@ -30,7 +30,7 @@ class FullTextSearch(ClauseElement):
 
     FullText support with in query, i.e.
         >>> from sqlalchemy_fulltext import FullTextSearch
-        >>> session.query(Foo).filter(FullTextSearch('adfadf', Foo))
+        >>> session.query(Foo).filter(FullTextSearch('Spam', Foo))
     """
     def __init__(self, against, model):
         self.model = model
@@ -49,6 +49,13 @@ def __mysql_fulltext_search(element, compiler, **kw):
 class FullText(object):
     """
     FullText Minxin object for SQLAlchemy
+    
+        >>> from sqlalchemy_fulltext import FullText
+        >>> class Foo(FullText, Base):
+        >>>     __fulltext_columns__ = ('spam', 'ham')
+        >>>     ...
+
+    fulltext search spam and ham now
     """
     
     __fulltext_columns__ = tuple()
@@ -69,11 +76,13 @@ class FullText(object):
                                     for c in cls.__fulltext_columns__)))
                          )
                      )
+    """
+    TODO: black magic in the future
+    @classmethod
     @declared_attr
     def __contains__(*arg):
-        print arg
         return True
-
+    """
 def __build_fulltext_index(mapper, class_):    
     if issubclass(class_, FullText):
         class_.build_fulltext()

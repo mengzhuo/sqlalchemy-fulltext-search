@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-s
 import unittest
 
 from sqlalchemy import Column, Integer, String, Text, create_engine
@@ -57,7 +58,6 @@ class TestSQLAlchemyFullText(unittest.TestCase):
         for entry in self.entries:
             self.assertIsNone( self.session.add(entry))
         self.session.commit()
-
     def test_fulltext_form_query(self):
         FullTextSearch('spam', RecipeReviewModel)
 
@@ -66,6 +66,12 @@ class TestSQLAlchemyFullText(unittest.TestCase):
         self.assertEqual(full.count(), 3,)
         raw = self.session.execute('SELECT * FROM {0} WHERE MATCH (commentor, review) AGAINST ("spam")'.format(RecipeReviewModel.__tablename__))
         self.assertEqual(full.count(), raw.rowcount, 'Query Test Failed')
+    
+    def test_fulltext_cjk_query(self):
+        cjk = self.session.query(RecipeReviewModel).filter(
+                                  FullTextSearch('中国人'.decode('utf8'),
+                                                 RecipeReviewModel))
+        self.assertEqual(cjk.count(), 2)
 
 
 if __name__ == '__main__':

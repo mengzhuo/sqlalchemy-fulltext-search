@@ -36,14 +36,12 @@ class FullTextSearch(ClauseElement):
         self.model = model
         self.against = escape_quote(against)
 
-
 @compiles(FullTextSearch, MYSQL)
 def __mysql_fulltext_search(element, compiler, **kw):
     assert issubclass(element.model, FullText), "{0} not FullTextable".format(element.model)
-
     return MYSQL_MATCH_AGAINST.format(",".join(
                                       element.model.__fulltext_columns__),
-                                      element.against)
+                                      element.against.encode('utf8'))
 
 
 class FullText(object):

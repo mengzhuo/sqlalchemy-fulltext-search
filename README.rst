@@ -7,9 +7,9 @@ Quick example:
 
 .. code:: python
 
-from sqlalchemy_fulltext import FullText, FullTextSearch
-class Foo(FullText, Base):
-    __fulltext_columns__ = ('spam', 'ham')
+    from sqlalchemy_fulltext import FullText, FullTextSearch
+    class Foo(FullText, Base):
+        __fulltext_columns__ = ('spam', 'ham')
 
-session.query(Foo).filter(FullTextSearch('Spam', Foo)) 
+    session.query(Foo).filter(FullTextSearch('Spam', Foo)) 
 

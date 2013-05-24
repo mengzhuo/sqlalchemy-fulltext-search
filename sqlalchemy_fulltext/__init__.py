@@ -9,11 +9,11 @@ from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.sql.expression import ClauseElement
 
 MYSQL = "mysql"
-MYSQL_BUILD_INDEX_QUERY = """
+MYSQL_BUILD_INDEX_QUERY = u"""
                           ALTER TABLE {0.__tablename__}
                           ADD FULLTEXT ({1})
                           """
-MYSQL_MATCH_AGAINST = """
+MYSQL_MATCH_AGAINST = u"""
                       MATCH ({0})
                       AGAINST ("{1}")
                       """
@@ -41,7 +41,7 @@ def __mysql_fulltext_search(element, compiler, **kw):
     assert issubclass(element.model, FullText), "{0} not FullTextable".format(element.model)
     return MYSQL_MATCH_AGAINST.format(",".join(
                                       element.model.__fulltext_columns__),
-                                      element.against.encode('utf8'))
+                                      element.against)
 
 
 class FullText(object):

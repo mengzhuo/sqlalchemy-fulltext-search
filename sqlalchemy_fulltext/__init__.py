@@ -15,12 +15,22 @@ MYSQL_BUILD_INDEX_QUERY = u"""
                           """
 MYSQL_MATCH_AGAINST = u"""
                       MATCH ({0})
-                      AGAINST ("{1}")
+                      AGAINST ("{1}" {2})
                       """
+
+SearchMode = {'BOOLEAN': 'IN BOOLEAN MODE',
+              'DEFAULT': '',
+              'NATURAL': 'IN NATURAL LANGUAGE MODE',
+              'QUERY_EXPANSION': 'WITH QUERY EXPANSION'}
+
 
 def escape_quote(string):
     return re.sub(r"[\"\']+", "", string)
 
+def enum(**args):
+    return type('Enum', (), args)
+
+FullTextMode = enum(BOOLEAN='BOOLEAN', NATURAL='NATURAL', QUERY_EXPANSION='QUERY_EXPANSION')
 
 class FullTextSearch(ClauseElement):
     """
@@ -32,16 +42,19 @@ class FullTextSearch(ClauseElement):
         >>> from sqlalchemy_fulltext import FullTextSearch
         >>> session.query(Foo).filter(FullTextSearch('Spam', Foo))
     """
-    def __init__(self, against, model):
+    def __init__(self, against, model, mode=None):
         self.model = model
         self.against = escape_quote(against)
+        self.mode = 'DEFAULT' if mode is None else mode
 
 @compiles(FullTextSearch, MYSQL)
 def __mysql_fulltext_search(element, compiler, **kw):
     assert issubclass(element.model, FullText), "{0} not FullTextable".format(element.model)
+    assert element.mode in SearchMode, "{0} not type of FullTextMode".format(element.mode)
     return MYSQL_MATCH_AGAINST.format(",".join(
                                       element.model.__fulltext_columns__),
-                                      element.against)
+                                      element.against,
+                                      SearchMode[element.mode])
 
 
 class FullText(object):

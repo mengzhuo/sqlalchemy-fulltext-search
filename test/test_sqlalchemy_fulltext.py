@@ -7,8 +7,8 @@ from sqlalchemy.orm import sessionmaker
 
 import sys
 sys.path.insert(0, '../')
-from sqlalchemy_fulltext import FullText, FullTextSearch, FullTextMode
-
+from sqlalchemy_fulltext import FullText, FullTextSearch
+import sqlalchemy_fulltext.modes as FullTextMode
 
 FULLTEXT_TABLE = "test_full_text"
 BASE = declarative_base()
@@ -65,6 +65,12 @@ class TestSQLAlchemyFullText(unittest.TestCase):
         full = self.session.query(RecipeReviewModel).filter(FullTextSearch('spam', RecipeReviewModel))
         self.assertEqual(full.count(), 3,)
         raw = self.session.execute('SELECT * FROM {0} WHERE MATCH (commentor, review) AGAINST ("spam")'.format(RecipeReviewModel.__tablename__))
+        self.assertEqual(full.count(), raw.rowcount, 'Query Test Failed')
+
+    def test_fulltext_query_natural_mode(self):
+        full = self.session.query(RecipeReviewModel).filter(FullTextSearch('spam', RecipeReviewModel, FullTextMode.NATURAL))
+        self.assertEqual(full.count(), 3,)
+        raw = self.session.execute('SELECT * FROM {0} WHERE MATCH (commentor, review) AGAINST ("spam" IN NATURAL LANGUAGE MODE)'.format(RecipeReviewModel.__tablename__))
         self.assertEqual(full.count(), raw.rowcount, 'Query Test Failed')
 
     def test_fulltext_query_boolean_mode(self):

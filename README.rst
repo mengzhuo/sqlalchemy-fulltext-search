@@ -5,7 +5,7 @@ Fulltext search support with MySQL & SQLAlchemy
 
 Examples:
 
-Default "IN NATURAL LANGUAGE MODE"
+Default 
 
 .. code:: python
 
@@ -13,15 +13,14 @@ Default "IN NATURAL LANGUAGE MODE"
     class Foo(FullText, Base):
         __fulltext_columns__ = ('spam', 'ham')
 
-    #Defaults to "IN NATURAL LANGUAGE MODE"
     session.query(Foo).filter(FullTextSearch('Spam', Foo)) 
-
 
 Using "IN BOOLEAN MODE":
 
 .. code:: python
 
-    from sqlalchemy_fulltext import FullText, FullTextSearch, FullTextMode
+    from sqlalchemy_fulltext import FullText, FullTextSearch
+    import sqlalchemy_fulltext.modes as FullTextMode
     class Foo(FullText, Base):
         __fulltext_columns__ = ('spam', 'ham')
 
@@ -31,7 +30,8 @@ Using "IN NATURAL LANGUAGE MODE":
 
 .. code:: python
 
-    from sqlalchemy_fulltext import FullText, FullTextSearch, FullTextMode
+    from sqlalchemy_fulltext import FullText, FullTextSearch
+    import sqlalchemy_fulltext.modes as FullTextMode
     class Foo(FullText, Base):
         __fulltext_columns__ = ('spam', 'ham')
 
@@ -41,7 +41,8 @@ Using "WITH QUERY EXPANSION"
 
 .. code:: python
 
-    from sqlalchemy_fulltext import FullText, FullTextSearch, FullTextMode
+    from sqlalchemy_fulltext import FullText, FullTextSearch
+    import sqlalchemy_fulltext.modes as FullTextMode
     class Foo(FullText, Base):
         __fulltext_columns__ = ('spam', 'ham')
 

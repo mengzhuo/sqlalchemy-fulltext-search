@@ -1,6 +1,8 @@
 SQLAlchemy-FullText-Search
 ==========================
 
+.. image:: https://travis-ci.org/mengzhuo/sqlalchemy-fulltext-search.png?branch=master
+
 Fulltext search support with MySQL & SQLAlchemy
 
 Quick example:

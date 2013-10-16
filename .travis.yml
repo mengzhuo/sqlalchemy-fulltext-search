@@ -1,4 +1,4 @@
-# http://travis-ci.org/#!/facebook/tornado
+# http://travis-ci.org/#!/mengzhuo/sqlalchemy-fulltext-search
 branches:
   only:
     - master
@@ -7,4 +7,8 @@ python:
     - 2.7
 install:
    - "pip install -r requirements.txt --use-mirrors" 
+before_script:
+  - mysql -e 'create database test_full_text;'
+  - mysql -e "CREATE USER 'foo'@'localhost';"
+  - mysql -e "GRANT USAGE ON *.* TO foo@localhost;"
 script: "python -m unittest test/test_sqlalchemy_fulltext.py"

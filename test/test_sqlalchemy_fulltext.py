@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-s
 import unittest
 
@@ -6,13 +7,13 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 import sys
-sys.path.insert(0, '../')
+sys.path.insert(0, './')
 from sqlalchemy_fulltext import FullText, FullTextSearch
 
 
 FULLTEXT_TABLE = "test_full_text"
 BASE = declarative_base()
-ENGINE = create_engine('mysql+mysqldb://foo:bar@localhost/test_fulltext?charset=utf8', echo=False)
+ENGINE = create_engine('mysql+mysqldb://foo@localhost/test_full_text?charset=utf8', echo=True)
 SESSION = sessionmaker(bind=ENGINE)()
 SESSION.execute('DROP TABLE IF EXISTS {0};'.format(FULLTEXT_TABLE))
 
@@ -21,7 +22,7 @@ class RecipeReviewModel(FullText, BASE):
 
     __tablename__ = FULLTEXT_TABLE
     # mroonga engine supporting CJK chars
-    __table_args__ = {'mysql_engine':'mroonga',
+    __table_args__ = {'mysql_engine':'MyISAM',
                       'mysql_charset':'utf8'}
     
     __fulltext_columns__ = ('commentor','review')
@@ -48,7 +49,7 @@ class TestSQLAlchemyFullText(unittest.TestCase):
 
     def test_fulltext_add(self):
         import json
-        with open('./test_fulltext.json') as fp:
+        with open('./test/test_fulltext.json') as fp:
             bulk = json.load(fp)
             for entry in bulk:
                 self.entries.append(RecipeReviewModel(

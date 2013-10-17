@@ -13,7 +13,7 @@ from sqlalchemy_fulltext import FullText, FullTextSearch
 
 FULLTEXT_TABLE = "test_full_text"
 BASE = declarative_base()
-ENGINE = create_engine('mysql+mysqldb://foo@localhost/test_full_text?charset=utf8', echo=True)
+ENGINE = create_engine('mysql+mysqldb://travis@localhost/test_full_text?charset=utf8', echo=True)
 SESSION = sessionmaker(bind=ENGINE)()
 SESSION.execute('DROP TABLE IF EXISTS {0};'.format(FULLTEXT_TABLE))
 

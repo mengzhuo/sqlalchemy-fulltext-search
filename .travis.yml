@@ -9,4 +9,4 @@ install:
    - "pip install -r requirements.txt --use-mirrors" 
 before_script:
   - mysql -e 'create database test_full_text'
-script: "python -m unittest test/test_sqlalchemy_fulltext.py"
+script: "python -m unittest test_sqlalchemy_fulltext"

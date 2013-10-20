@@ -12,7 +12,7 @@
 	{
 		"id" : 3,
 		"commentor" : "ham",
-		"review" : "I think it's time to eat antispam"
+		"review" : "i think it's time to eat antispam"
 	},
 	{
 		"id" : 4,
@@ -33,5 +33,10 @@
 		"id" : 7,
 		"commentor" : "中国人",
 		"review" : "谁说我不顶的？"
+	},
+	{
+		"id" : 8,
+		"commentor" : "spam is good",
+		"review" : "i think it's time to eat antispam"
 	}
 ]

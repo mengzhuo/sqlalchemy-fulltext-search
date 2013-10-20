@@ -5,18 +5,11 @@ from sqlalchemy import event
 from sqlalchemy.schema import DDL
 from sqlalchemy.orm.mapper import Mapper
 from sqlalchemy.ext.compiler import compiles
-from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.sql.expression import ClauseElement
 
 MYSQL = "mysql"
-MYSQL_BUILD_INDEX_QUERY = u"""
-                          ALTER TABLE {0.__tablename__}
-                          ADD FULLTEXT ({1})
-                          """
-MYSQL_MATCH_AGAINST = u"""
-                      MATCH ({0})
-                      AGAINST ("{1}")
-                      """
+MYSQL_BUILD_INDEX_QUERY = u"""ALTER TABLE {0.__tablename__} ADD FULLTEXT ({1})"""
+MYSQL_MATCH_AGAINST = u"""MATCH ({0}) AGAINST ("{1}")"""
 
 def escape_quote(string):
     return re.sub(r"[\"\']+", "", string)

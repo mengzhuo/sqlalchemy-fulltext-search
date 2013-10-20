@@ -6,8 +6,6 @@ from sqlalchemy import Column, Integer, String, Text, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-import sys
-sys.path.insert(0, './')
 from sqlalchemy_fulltext import FullText, FullTextSearch
 
 
@@ -17,6 +15,9 @@ ENGINE = create_engine('mysql+mysqldb://travis@localhost/test_full_text?charset=
 SESSION = sessionmaker(bind=ENGINE)()
 SESSION.execute('DROP TABLE IF EXISTS {0};'.format(FULLTEXT_TABLE))
 
+MYSQL_ENGINES = [i[0] for i in SESSION.execute('SHOW ENGINES;').fetchall()
+                if i[1] == "YES"]
+MYSQL_VERSION = SESSION.execute('SHOW VARIABLES LIKE "version";').fetchone()[1]
 
 class RecipeReviewModel(FullText, BASE):
 
@@ -42,6 +43,7 @@ class TestSQLAlchemyFullText(unittest.TestCase):
         self.engine = ENGINE
         self.session = SESSION
 
+
         self.entries = []
 
     def test_fulltext_abuild(self):
@@ -49,7 +51,7 @@ class TestSQLAlchemyFullText(unittest.TestCase):
 
     def test_fulltext_add(self):
         import json
-        with open('./test/test_fulltext.json') as fp:
+        with open('test_fulltext.json') as fp:
             bulk = json.load(fp)
             for entry in bulk:
                 self.entries.append(RecipeReviewModel(
@@ -64,10 +66,11 @@ class TestSQLAlchemyFullText(unittest.TestCase):
 
     def test_fulltext_query(self):
         full = self.session.query(RecipeReviewModel).filter(FullTextSearch('spam', RecipeReviewModel))
-        self.assertEqual(full.count(), 3,)
+        self.assertEqual(full.count(), 2,)
         raw = self.session.execute('SELECT * FROM {0} WHERE MATCH (commentor, review) AGAINST ("spam")'.format(RecipeReviewModel.__tablename__))
         self.assertEqual(full.count(), raw.rowcount, 'Query Test Failed')
-    
+   
+    @unittest.skipIf(not 'mroonga' in MYSQL_ENGINES, 'mroonga engines not available')
     def test_fulltext_cjk_query(self):
         cjk = self.session.query(RecipeReviewModel).filter(
                                   FullTextSearch('中国人'.decode('utf8'),

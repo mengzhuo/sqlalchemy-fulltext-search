@@ -79,7 +79,7 @@ class TestSQLAlchemyFullText(unittest.TestCase):
     
     def test_fulltext_query_natural_mode(self):
         full = self.session.query(RecipeReviewModel).filter(FullTextSearch('spam', RecipeReviewModel, FullTextMode.NATURAL))
-        self.assertEqual(full.count(), 3,)
+        self.assertEqual(full.count(), 2,)
         raw = self.session.execute('SELECT * FROM {0} WHERE MATCH (commentor, review) AGAINST ("spam" IN NATURAL LANGUAGE MODE)'.format(RecipeReviewModel.__tablename__))
         self.assertEqual(full.count(), raw.rowcount, 'Query Test Failed')
 

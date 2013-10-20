@@ -7,7 +7,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 from sqlalchemy_fulltext import FullText, FullTextSearch
-
+import sqlalchemy_fulltext.modes as FullTextMode
 
 FULLTEXT_TABLE = "test_full_text"
 BASE = declarative_base()
@@ -69,14 +69,31 @@ class TestSQLAlchemyFullText(unittest.TestCase):
         self.assertEqual(full.count(), 2,)
         raw = self.session.execute('SELECT * FROM {0} WHERE MATCH (commentor, review) AGAINST ("spam")'.format(RecipeReviewModel.__tablename__))
         self.assertEqual(full.count(), raw.rowcount, 'Query Test Failed')
-   
+    
     @unittest.skipIf(not 'mroonga' in MYSQL_ENGINES, 'mroonga engines not available')
     def test_fulltext_cjk_query(self):
         cjk = self.session.query(RecipeReviewModel).filter(
                                   FullTextSearch('中国人'.decode('utf8'),
                                                  RecipeReviewModel))
-        self.assertEqual(cjk.count(), 2)
 
+    
+    def test_fulltext_query_natural_mode(self):
+        full = self.session.query(RecipeReviewModel).filter(FullTextSearch('spam', RecipeReviewModel, FullTextMode.NATURAL))
+        self.assertEqual(full.count(), 3,)
+        raw = self.session.execute('SELECT * FROM {0} WHERE MATCH (commentor, review) AGAINST ("spam" IN NATURAL LANGUAGE MODE)'.format(RecipeReviewModel.__tablename__))
+        self.assertEqual(full.count(), raw.rowcount, 'Query Test Failed')
+
+    def test_fulltext_query_boolean_mode(self):
+        full = self.session.query(RecipeReviewModel).filter(FullTextSearch('spa*', RecipeReviewModel, FullTextMode.BOOLEAN))
+        self.assertEqual(full.count(), 3,)
+        raw = self.session.execute('SELECT * FROM {0} WHERE MATCH (commentor, review) AGAINST ("spa*" IN BOOLEAN MODE)'.format(RecipeReviewModel.__tablename__))
+        self.assertEqual(full.count(), raw.rowcount, 'Query Test Failed')
+
+    def test_fulltext_query_query_expansion_mode(self):
+        full = self.session.query(RecipeReviewModel).filter(FullTextSearch('spam', RecipeReviewModel, FullTextMode.QUERY_EXPANSION))
+        self.assertEqual(full.count(), 3,)
+        raw = self.session.execute('SELECT * FROM {0} WHERE MATCH (commentor, review) AGAINST ("spam" WITH QUERY EXPANSION)'.format(RecipeReviewModel.__tablename__))
+        self.assertEqual(full.count(), raw.rowcount, 'Query Test Failed')
 
 if __name__ == '__main__':
     unittest.main()

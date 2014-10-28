@@ -11,7 +11,12 @@ import sqlalchemy_fulltext.modes as FullTextMode
 
 FULLTEXT_TABLE = "test_full_text"
 BASE = declarative_base()
-ENGINE = create_engine('mysql+mysqldb://travis@localhost/test_full_text?charset=utf8', echo=True)
+
+try:
+    ENGINE = create_engine('mysql+mysqldb://travis@localhost/test_full_text?charset=utf8', echo=True)
+except ImportError:
+    ENGINE = create_engine('mysql+pymysql://travis@localhost/test_full_text?charset=utf8', echo=True)
+
 SESSION = sessionmaker(bind=ENGINE)()
 SESSION.execute('DROP TABLE IF EXISTS {0};'.format(FULLTEXT_TABLE))
 

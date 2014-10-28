@@ -8,7 +8,7 @@ from sqlalchemy.schema import DDL
 from sqlalchemy.orm.mapper import Mapper
 from sqlalchemy.ext.compiler import compiles
 from sqlalchemy.sql.expression import ClauseElement
-import modes as FullTextMode
+import sqlalchemy_fulltext.modes as FullTextMode
 
 MYSQL = "mysql"
 MYSQL_BUILD_INDEX_QUERY = u"""ALTER TABLE {0.__tablename__} ADD FULLTEXT ({1})"""

@@ -38,5 +38,20 @@
 		"id" : 8,
 		"commentor" : "spam is good",
 		"review" : "i think it's time to eat antispam"
+	},
+	{
+		"id" : 9,
+		"commentor" : "parrot can fly",
+		"review" : "to the rainbow"
+	},
+	{
+		"id" : 10,
+		"commentor" : "parrot can sing",
+		"review" : "above the rainbow"
+	},
+	{
+		"id" : 11,
+		"commentor" : "parrot sing can",
+		"review" : "above the rainbow"
 	}
 ]

@@ -69,6 +69,12 @@ class TestSQLAlchemyFullText(unittest.TestCase):
         self.assertEqual(full.count(), 2,)
         raw = self.session.execute('SELECT * FROM {0} WHERE MATCH (commentor, review) AGAINST ("spam")'.format(RecipeReviewModel.__tablename__))
         self.assertEqual(full.count(), raw.rowcount, 'Query Test Failed')
+
+    def test_fulltext_qutoe_query(self):
+        full = self.session.query(RecipeReviewModel).filter(FullTextSearch('"parrot can"', RecipeReviewModel, FullTextMode.BOOLEAN))
+        self.assertEqual(full.count(), 2,)
+        raw = self.session.execute("""SELECT * FROM {0} WHERE MATCH (commentor, review) AGAINST ('"parrot can"' IN BOOLEAN MODE)""".format(RecipeReviewModel.__tablename__))
+        self.assertEqual(full.count(), raw.rowcount)
     
     @unittest.skipIf(not 'mroonga' in MYSQL_ENGINES, 'mroonga engines not available')
     def test_fulltext_cjk_query(self):

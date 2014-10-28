@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-s
+
 import re
 
-from sqlalchemy import event
+
+from sqlalchemy import event, literal
 from sqlalchemy.schema import DDL
 from sqlalchemy.orm.mapper import Mapper
 from sqlalchemy.ext.compiler import compiles
@@ -12,12 +14,11 @@ MYSQL = "mysql"
 MYSQL_BUILD_INDEX_QUERY = u"""ALTER TABLE {0.__tablename__} ADD FULLTEXT ({1})"""
 MYSQL_MATCH_AGAINST = u"""
                       MATCH ({0})
-                      AGAINST ("{1}" {2})
+                      AGAINST ({1} {2})
                       """
 
 def escape_quote(string):
     return re.sub(r"[\"\']+", "", string)
-
 
 class FullTextSearch(ClauseElement):
     """
@@ -31,15 +32,14 @@ class FullTextSearch(ClauseElement):
     """
     def __init__(self, against, model, mode=FullTextMode.DEFAULT):
         self.model = model
-        self.against = escape_quote(against)
+        self.against = literal(against)
         self.mode = mode
 
 @compiles(FullTextSearch, MYSQL)
 def __mysql_fulltext_search(element, compiler, **kw):
     assert issubclass(element.model, FullText), "{0} not FullTextable".format(element.model)
-    return MYSQL_MATCH_AGAINST.format(",".join(
-                                      element.model.__fulltext_columns__),
-                                      element.against,
+    return MYSQL_MATCH_AGAINST.format(", ".join(element.model.__fulltext_columns__),
+                                      compiler.process(element.against),
                                       element.mode)
 
 
@@ -80,6 +80,8 @@ class FullText(object):
     def __contains__(*arg):
         return True
     """
+
+
 def __build_fulltext_index(mapper, class_):    
     if issubclass(class_, FullText):
         class_.build_fulltext()

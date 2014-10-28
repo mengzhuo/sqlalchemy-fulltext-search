@@ -6,7 +6,7 @@ language: python
 python:
     - 2.7
 install:
-   - "pip install -r .travis.requirements.txt --use-mirrors" 
+   - "pip install -r .travis.requirements.txt" 
 before_script:
   - mysql -e 'create database test_full_text'
 script: "python -m unittest test_sqlalchemy_fulltext"

@@ -38,7 +38,7 @@ class FullTextSearch(ClauseElement):
 @compiles(FullTextSearch, MYSQL)
 def __mysql_fulltext_search(element, compiler, **kw):
     assert issubclass(element.model, FullText), "{0} not FullTextable".format(element.model)
-    return MYSQL_MATCH_AGAINST.format(", ".join(element.model.__fulltext_columns__),
+    return MYSQL_MATCH_AGAINST.format(", ".join(["`" + element.model.__table__.fullname + "`." + column for column in element.model.__fulltext_columns__]),
                                       compiler.process(element.against),
                                       element.mode)
 

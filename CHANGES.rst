@@ -1,5 +1,8 @@
 Changelog
 ---------
+0.2.2 (2015-01-09)
+
+    * Fix Ambiguous clause problem (by equus71)
 
 0.2.1 (2014-10-28 10:31)
 

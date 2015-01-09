@@ -35,12 +35,20 @@ class FullTextSearch(ClauseElement):
         self.against = literal(against)
         self.mode = mode
 
+
+def get_table_name(element):
+    if hasattr(element.model, "__table__"):
+        return "`" + element.model.__table__.fullname + "`."
+    return ""
+
+
 @compiles(FullTextSearch, MYSQL)
 def __mysql_fulltext_search(element, compiler, **kw):
     assert issubclass(element.model, FullText), "{0} not FullTextable".format(element.model)
-    return MYSQL_MATCH_AGAINST.format(", ".join(["`" + element.model.__table__.fullname + "`." + column for column in element.model.__fulltext_columns__]),
-                                      compiler.process(element.against),
-                                      element.mode)
+    return MYSQL_MATCH_AGAINST.format(
+        ", ".join([get_table_name(element) + column for column in element.model.__fulltext_columns__]),
+        compiler.process(element.against),
+        element.mode)
 
 
 class FullText(object):

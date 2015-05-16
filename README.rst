@@ -26,7 +26,7 @@ Using "IN BOOLEAN MODE":
     class Foo(FullText, Base):
         __fulltext_columns__ = ('spam', 'ham')
 
-    session.query(Foo).filter(FullTextSearch('Spa*', Foo, FullTextMode.BOOLEAN))
+    session.query(Foo).filter(FullTextSearch('Spam', Foo, FullTextMode.BOOLEAN))
 
 Using "IN NATURAL LANGUAGE MODE":
 

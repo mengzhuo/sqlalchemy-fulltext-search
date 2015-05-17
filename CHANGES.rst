@@ -1,5 +1,10 @@
 Changelog
 ---------
+0.2.3 (2015-05-17)
+
+    * Fix absolute import (by samsam2310)
+    * Fix typo 
+
 0.2.2 (2015-01-09)
 
     * Fix Ambiguous clause problem (by equus71)

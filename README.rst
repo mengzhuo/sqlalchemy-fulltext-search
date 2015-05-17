@@ -2,7 +2,7 @@ SQLAlchemy-FullText-Search
 ==========================
 
 .. image:: https://travis-ci.org/mengzhuo/sqlalchemy-fulltext-search.png?branch=master
-[![Code Health](https://landscape.io/github/mengzhuo/sqlalchemy-fulltext-search/dev/landscape.svg?style=flat)](https://landscape.io/github/mengzhuo/sqlalchemy-fulltext-search/dev)
+.. image:: https://landscape.io/github/mengzhuo/sqlalchemy-fulltext-search/dev/landscape.svg?style=flat
 
 Fulltext search support with MySQL & SQLAlchemy
 

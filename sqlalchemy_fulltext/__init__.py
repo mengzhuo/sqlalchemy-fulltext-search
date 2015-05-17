@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-s
 
-import re
+from __future__ import absolute_import
 
+import re
 
 from sqlalchemy import event, literal
 from sqlalchemy.schema import DDL
 from sqlalchemy.orm.mapper import Mapper
 from sqlalchemy.ext.compiler import compiles
 from sqlalchemy.sql.expression import ClauseElement
-import sqlalchemy_fulltext.modes as FullTextMode
+from . import modes as FullTextMode
+
 
 MYSQL = "mysql"
 MYSQL_BUILD_INDEX_QUERY = u"""ALTER TABLE {0.__tablename__} ADD FULLTEXT ({1})"""

@@ -66,6 +66,7 @@ class FullText(object):
     """
     
     __fulltext_columns__ = tuple()
+    __table_args__['mysql_engine'] = 'MyISAM'
 
     @classmethod
     def build_fulltext(cls):

@@ -100,6 +100,14 @@ class TestSQLAlchemyFullText(unittest.TestCase):
         raw = self.session.execute('SELECT * FROM {0} WHERE MATCH (commentor, review) AGAINST ("spa*" IN BOOLEAN MODE)'.format(RecipeReviewModel.__tablename__))
         self.assertEqual(full.count(), raw.rowcount, 'Query Test Failed')
 
+    def test_github_issue_9(self):
+        # https://github.com/mengzhuo/sqlalchemy-fulltext-search/issues/9
+        full = self.session.query(RecipeReviewModel).filter(FullTextSearch('the- rainbow', RecipeReviewModel, FullTextMode.BOOLEAN)).limit(20)
+        self.assertEqual(full.count(), 3)
+        raw = self.session.execute('SELECT * FROM {0} WHERE MATCH (commentor, review) AGAINST ("the- rainbow" IN BOOLEAN MODE)'.format(RecipeReviewModel.__tablename__))
+        self.assertEqual(full.count(), raw.rowcount, 'Query Test Failed')
+
+
     def test_fulltext_query_query_expansion_mode(self):
         full = self.session.query(RecipeReviewModel).filter(FullTextSearch('spam', RecipeReviewModel, FullTextMode.QUERY_EXPANSION))
         self.assertEqual(full.count(), 3,)

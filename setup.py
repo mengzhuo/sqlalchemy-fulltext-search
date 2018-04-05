@@ -7,7 +7,7 @@ from setuptools import setup, Command
 
 setup(
         name='SQLAlchemy-FullText-Search',
-        version='0.2.3',
+        version='0.2.4',
         url='https://github.com/mengzhuo/sqlalchemy-fulltext-search',
         license='BSD',
         author='Meng Zhuo, Alejandro Mesa',
@@ -18,7 +18,7 @@ setup(
         zip_safe=False,
         include_package_data=True,
         platforms='any',
-        install_requires=['SQLAlchemy>=0.8',],
+        install_requires=['SQLAlchemy>=1.0',],
             classifiers=[
                         'Environment :: Web Environment',
                         'Intended Audience :: Developers',

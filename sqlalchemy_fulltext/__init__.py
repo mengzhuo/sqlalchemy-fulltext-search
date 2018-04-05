@@ -68,7 +68,7 @@ class FullText(object):
     __fulltext_columns__ = tuple()
 
     @classmethod
-    def build_fulltext(cls):
+    def build_fulltext(cls, table):
         """
         build up fulltext index after table is created
         """
@@ -76,7 +76,7 @@ class FullText(object):
             return
         assert cls.__fulltext_columns__, "Model:{0.__name__} No FullText columns defined".format(cls)
 
-        event.listen(cls.__table__,
+        event.listen(table,
                      'after_create',
                      DDL(MYSQL_BUILD_INDEX_QUERY.format(cls,
                          ", ".join((escape_quote(c)
@@ -94,7 +94,7 @@ class FullText(object):
 
 def __build_fulltext_index(mapper, class_):    
     if issubclass(class_, FullText):
-        class_.build_fulltext()
+        class_.build_fulltext(mapper.mapped_table)
 
 
 event.listen(Mapper, 'instrument_class', __build_fulltext_index)

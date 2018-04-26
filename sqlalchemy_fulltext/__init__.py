@@ -4,7 +4,7 @@ from __future__ import absolute_import
 
 import re
 
-from sqlalchemy import event, literal
+from sqlalchemy import event, literal, Index
 from sqlalchemy.schema import DDL
 from sqlalchemy.orm.mapper import Mapper
 from sqlalchemy.ext.compiler import compiles
@@ -74,6 +74,8 @@ class FullText(object):
         """
         if FullText not in cls.__bases__:
             return
+        if not cls.__fulltext_after_create__:
+            return
         assert cls.__fulltext_columns__, "Model:{0.__name__} No FullText columns defined".format(cls)
 
         event.listen(table,
@@ -90,6 +92,17 @@ class FullText(object):
     def __contains__(*arg):
         return True
     """
+
+    __fulltext_after_create__ = True
+    @classmethod
+    def index_fulltext(cls):
+        """
+        call like Index('idx_<__tablename__>_fulltext', *__fulltext_columns__, mysql_prefix='FULLTEXT')
+        """
+        cls.__fulltext_after_create__ = False
+        Index('idx_%s_fulltext' % cls.__tablename__,
+                *(getattr(cls, c) for c in cls.__fulltext_columns__),
+                  mysql_prefix='FULLTEXT')
 
 
 def __build_fulltext_index(mapper, class_):    

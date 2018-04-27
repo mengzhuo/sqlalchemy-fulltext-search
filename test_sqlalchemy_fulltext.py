@@ -6,7 +6,7 @@ from sqlalchemy import Column, Integer, String, Text, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-from sqlalchemy_fulltext import FullText, FullTextSearch
+from sqlalchemy_fulltext import FullText, FullTextSearch, FullTextForMigration
 import sqlalchemy_fulltext.modes as FullTextMode
 
 FULLTEXT_TABLE = "test_full_text"
@@ -44,7 +44,7 @@ class RecipeReviewModel(FullText, BASE):
         self.commentor = commentor
 
 
-class RecipeReviewModelForMigration(FullText, BASE):
+class RecipeReviewModelForMigration(FullTextForMigration, BASE):
     __tablename__ = FULLTEXT_TABLE_FOR_MIGRATION
     # mroonga engine supporting CJK chars
     __table_args__ = {'mysql_engine': 'MyISAM',

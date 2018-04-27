@@ -94,12 +94,18 @@ class FullText(object):
     """
 
     __fulltext_after_create__ = True
+
+
+class FullTextForMigration(FullText):
+    __fulltext_after_create__ = False
+
     @classmethod
     def index_fulltext(cls):
         """
         call like Index('idx_<__tablename__>_fulltext', *__fulltext_columns__, mysql_prefix='FULLTEXT')
         """
-        cls.__fulltext_after_create__ = False
+        assert cls.__tablename__, "Model:{0.__name__} No table name defined".format(cls)
+        assert cls.__fulltext_columns__, "Model:{0.__name__} No FullText columns defined".format(cls)
         Index('idx_%s_fulltext' % cls.__tablename__,
                 *(getattr(cls, c) for c in cls.__fulltext_columns__),
                   mysql_prefix='FULLTEXT')

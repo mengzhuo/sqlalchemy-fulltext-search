@@ -2,13 +2,14 @@
 branches:
   only:
     - master
+    - dev
 language: python
 python:
     - 2.7
-    - 3.3
     - 3.4
+    - 3.6
 install:
-   - "pip install -r .travis.requirements.txt" 
+   - "pip install -r .travis.requirements.txt"
 before_script:
   - mysql -e 'create database test_full_text'
 script: "python -m unittest test_sqlalchemy_fulltext"

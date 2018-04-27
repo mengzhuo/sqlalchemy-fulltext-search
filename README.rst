@@ -1,14 +1,15 @@
 SQLAlchemy-FullText-Search
 ==========================
 
-.. image:: https://travis-ci.org/mengzhuo/sqlalchemy-fulltext-search.png?branch=master
+.. image:: https://travis-ci.org/mengzhuo/sqlalchemy-fulltext-search.svg?branch=dev
+    :target: https://travis-ci.org/mengzhuo/sqlalchemy-fulltext-search
 .. image:: https://landscape.io/github/mengzhuo/sqlalchemy-fulltext-search/dev/landscape.svg?style=flat
 
 Fulltext search support with MySQL & SQLAlchemy
 
 Examples:
 
-Default 
+Default
 
 .. code:: python
 
@@ -16,7 +17,7 @@ Default
     class Foo(FullText, Base):
         __fulltext_columns__ = ('spam', 'ham')
 
-    session.query(Foo).filter(FullTextSearch('Spam', Foo)) 
+    session.query(Foo).filter(FullTextSearch('Spam', Foo))
 
 Using "IN BOOLEAN MODE":
 

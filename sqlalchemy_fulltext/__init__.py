@@ -83,7 +83,7 @@ class FullText(object):
                      DDL(MYSQL_BUILD_INDEX_QUERY.format(cls,
                          ", ".join((escape_quote(c)
                                     for c in cls.__fulltext_columns__)))
-                         )
+                         ).execute_if(dialect=MYSQL)
                      )
     """
     TODO: black magic in the future

@@ -1,2 +1,2 @@
-SQLAlchemy>=0.8
+SQLAlchemy>=1.4
 pymysql

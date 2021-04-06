@@ -8,7 +8,8 @@ from sqlalchemy import event, literal, Index
 from sqlalchemy.schema import DDL
 from sqlalchemy.orm.mapper import Mapper
 from sqlalchemy.ext.compiler import compiles
-from sqlalchemy.sql.expression import ClauseElement
+# from sqlalchemy.sql.expression import ClauseElement   # DEPRECATED from SQLAlchemy>=1.4
+from sqlalchemy.sql.expression import ColumnClause
 from . import modes as FullTextMode
 
 
@@ -22,7 +23,8 @@ MYSQL_MATCH_AGAINST = u"""
 def escape_quote(string):
     return re.sub(r"[\"\']+", "", string)
 
-class FullTextSearch(ClauseElement):
+# class FullTextSearch(ClauseElement):  # DEPRECATED from SQLAlchemy>=1.4
+class FullTextSearch(ColumnClause):
     """
     Search FullText
     :param against: the search query
@@ -55,7 +57,7 @@ def __mysql_fulltext_search(element, compiler, **kw):
 
 class FullText(object):
     """
-    FullText Minxin object for SQLAlchemy
+    FullText Mixin object for SQLAlchemy
     
         >>> from sqlalchemy_fulltext import FullText
         >>> class Foo(FullText, Base):
@@ -64,7 +66,7 @@ class FullText(object):
 
     fulltext search spam and ham now
     """
-    
+
     __fulltext_columns__ = tuple()
 
     @classmethod
@@ -111,7 +113,7 @@ class FullTextForMigration(FullText):
                   mysql_prefix='FULLTEXT')
 
 
-def __build_fulltext_index(mapper, class_):    
+def __build_fulltext_index(mapper, class_):
     if issubclass(class_, FullText):
         class_.build_fulltext(mapper.mapped_table)
 

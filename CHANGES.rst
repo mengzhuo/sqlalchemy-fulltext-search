@@ -4,7 +4,7 @@ Changelog
 
     * Fix expression import for SQLAlchemy>=1.4, using `ColumnClause` instead of `ClauseElement` (by Comuni-Chiamo)
     * Fix some typos (by Comuni-Chiamo)
-    * Updated SQLAlchemy dependencies (by Comuni-Chiamo)
+    * Updated travis and requirements (by Comuni-Chiamo)
 
 0.2.3 (2015-05-17)
 

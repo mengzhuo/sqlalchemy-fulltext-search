@@ -1,5 +1,10 @@
 Changelog
 ---------
+0.2.7 (2021-07-20)
+
+    * Replaced deprecated `mapper.mapped_table` with new `mapper.persist_selectable` (by Comuni-Chiamo)
+    * Fixed some warnings about PEP8 and Flake8 (by Comuni-Chiamo)
+
 0.2.6 (2021-04-06)
 
     * Fix expression import for SQLAlchemy>=1.4, using `ColumnClause` instead of `ClauseElement` (by Comuni-Chiamo)

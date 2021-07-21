@@ -7,11 +7,11 @@ from setuptools import setup
 
 setup(
     name='SQLAlchemy-FullText-Search',
-    version='0.2.7',
-    url='https://github.com/Comuni-Chiamo-srl/sqlalchemy-fulltext-search.git',
+    version='0.3.0',
+    url='https://github.com/mengzhuo/sqlalchemy-fulltext-search',
     license='BSD',
-    author='Meng Zhuo, Alejandro Mesa, Comuni-Chiamo',
-    author_email='mengzhuo1203@gmail.com, alejom99@gmail.com, matteo@comuni-chiamo.com, davide@comuni-chiamo.com',
+    author='Meng Zhuo, Alejandro Mesa, Davide Marchi',
+    author_email='mengzhuo1203@gmail.com, alejom99@gmail.com, dvdmrc92@gmail.com',
     description=('Provide FullText for MYSQL & SQLAlchemy model'),
     long_description=__doc__,
     packages=['sqlalchemy_fulltext'],
